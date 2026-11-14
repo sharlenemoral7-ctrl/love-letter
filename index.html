@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<!--
+  ============================================================
+  STARTER LOVE LETTER TEMPLATE — EDIT ME!
+  ============================================================
+  1. Search for "EDIT ME" in this file and change those spots:
+     recipient name, PIN, letter text, signature, photo captions.
+  2. Photos: create a folder called  images  next to this file
+     and put photo1.jpg, photo2.jpg, photo3.jpg, photo4.jpg in it.
+     For the chocolate surprise, put chocolate.jpg in the same
+     images folder. If a photo is missing, a pretty placeholder
+     shows instead.
+     The very last part is a favorite-color quiz: a. Blue is
+     correct and reveals "look under your bed"; b. Black and
+     c. Yellow show "You're wrong" with a sad emoji.
+  3. Music (optional): in the EDIT ME settings below, paste
+     any YouTube link into MUSIC_YOUTUBE_URL — a normal watch
+     link, a youtu.be short link, a Shorts link, or an embed
+     link all work. Browsers block sound before a tap, so the
+     music starts when the reader taps "I'm ready" (and is
+     nudged again when the envelope opens). It loops quietly
+     in the background while they read. It needs internet,
+     and some songs are blocked by their owners from playing
+     on other websites — if yours stays silent, try another
+     song/link. Use the ♪ Music button (bottom-right, appears
+     once music starts) to turn it off or on.
+  4. Test: double-click this file to open it in your browser.
+  5. Publish free: GitHub repo -> upload this file + images folder
+     -> Settings -> Pages -> Deploy from branch (main).
+  6. QR CODE SHARING: The QR code lives on the FRONT PAGE
+     (home / intro screen) only — it does not appear on any
+     other screen. After you publish, paste your published
+     link into SHARE_URL in the EDIT ME settings below (or type
+     it in the field on the front page). The page will make a
+     QR code for it — anyone who scans it opens your letter.
+     You can also download the QR as a PNG to print or send
+     in Messenger.
+  NOTE: The PIN is visible in the code — it's a cute lock, not
+  real privacy. Don't put anything secret in the letter.
+  ============================================================
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- EDIT ME: browser tab title -->
+<title>For You ♡</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: Georgia, 'Times New Roman', serif;
+    min-height: 100vh; color: #4a2430; text-align: center;
+    background: linear-gradient(180deg,#ffd9a0 0%,#ffb3c1 45%,#ff8fab 100%);
+    overflow-x: hidden;
+  }
+  .hearts { position: fixed; inset: 0; pointer-events: none; font-size: 20px; opacity: .35; }
+  .screen { display: none; min-height: 100vh; padding: 32px 20px 48px;
+    flex-direction: column; align-items: center; justify-content: center; gap: 18px; }
+  .screen.active { display: flex; }
+  .card { background: rgba(255,255,255,.92); border-radius: 24px; padding: 28px 22px;
+    max-width: 520px; width: 100%; box-shadow: 0 12px 32px rgba(120,30,60,.25); }
+  h1 { font-size: 2rem; line-height: 1.2; } h2 { font-size: 1.5rem; }
+  p { line-height: 1.6; } .small { font-size: .9rem; opacity: .75; }
+  button { font: inherit; cursor: pointer; border: 0; border-radius: 999px;
+    padding: 14px 28px; background: #e75480; color: #fff; font-weight: bold;
+    box-shadow: 0 6px 16px rgba(180,40,90,.35); }
+  button:active { transform: scale(.97); }
+  button.ghost { background: #fff; color: #e75480; border: 2px solid #e75480; }
+</style>
+</head>
+<style>
+  /* PIN lock */
+  .big-heart { font-size: 72px; animation: pulse 1.2s ease-in-out infinite; }
+  @keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.12)} }
+  .pin-display { font-size: 2rem; letter-spacing: 12px; min-height: 44px; }
+  .keypad { display: grid; grid-template-columns: repeat(3,72px); gap: 10px; justify-content: center; }
+  .keypad button { padding: 16px 0; font-size: 1.3rem; background:#fff; color:#e75480; border:2px solid #ffb3c1; box-shadow:none; }
+  .shake { animation: shake .4s; }
+  @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-8px)} 75%{transform:translateX(8px)} }
+  /* Envelope */
+  .envelope { font-size: 110px; cursor: pointer; transition: transform .3s; }
+  .envelope:hover { transform: scale(1.06) rotate(-2deg); }
+  /* Letter */
+  .letter-text { text-align: left; white-space: pre-wrap; min-height: 220px; font-size: 1.05rem; }
+  .signature { text-align: right; margin-top: 16px; font-style: italic; }
+  /* Collage */
+  .collage { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; max-width: 520px; width: 100%; }
+  .photo { background: #ffe4ec; border: 6px solid #fff; border-radius: 12px; overflow: hidden;
+    box-shadow: 0 6px 16px rgba(120,30,60,.2); }
+  .photo img { width: 100%; height: 180px; object-fit: cover; display: block; }
+  .photo figcaption { padding: 8px; font-size: .9rem; background:#fff; }
+  .photo .placeholder { height: 180px; display:flex; align-items:center; justify-content:center;
+    font-size: 2.4rem; background: linear-gradient(135deg,#ffd6e0,#ffb3c1); }
+  /* Chocolate surprise */
+  .chocolate-photo { background: #ffe4ec; border: 6px solid #fff; border-radius: 12px;
+    overflow: hidden; box-shadow: 0 6px 16px rgba(120,30,60,.2); max-width: 420px; width: 100%; margin: 0 auto; }
+  .chocolate-photo img { width: 100%; height: 260px; object-fit: cover; display: block; }
+  .chocolate-photo .placeholder { height: 260px; display:flex; align-items:center; justify-content:center;
+    font-size: 4rem; background: linear-gradient(135deg,#ffd6e0,#ffb3c1); }
+  .chocolate-note { font-size: 1.25rem; font-weight: bold; margin-top: 14px; }
+  /* Favorite color finale */
+  .color-options { display: flex; flex-direction: column; gap: 10px; width: 100%; max-width: 320px; margin: 6px auto 0; }
+  .color-options button { width: 100%; text-align: left; }
+  .fav-quote { font-size: 1.4rem; font-weight: bold; font-style: italic; margin-top: 14px; }
+  /* Share / QR code */
+  .qr-box { background:#fff; border:2px solid #ffb3c1; border-radius:16px; padding:16px;
+    display:flex; flex-direction:column; align-items:center; gap:10px; }
+  #qrcode { background:#fff; padding:10px; border-radius:12px; min-height:180px;
+    display:flex; align-items:center; justify-content:center; }
+  #qrcode img, #qrcode canvas { max-width:100%; height:auto; }
+  .share-input { width:100%; font:inherit; padding:12px 14px; border-radius:999px;
+    border:2px solid #ffb3c1; text-align:center; color:#4a2430; }
+  .share-row { display:flex; flex-wrap:wrap; gap:10px; justify-content:center; }
+  /* Background music toggle (fixed pill) */
+  #musicToggleBtn { position: fixed; right: 14px; bottom: 14px; z-index: 999;
+    padding: 10px 16px; font-size: .9rem; background: rgba(255,255,255,.94);
+    color: #e75480; border: 2px solid #e75480;
+    box-shadow: 0 6px 16px rgba(120,30,60,.28); }
+  /* Hidden YouTube music player: off-screen, never shows video */
+  #ytMusicWrap { position: fixed; left: -9999px; top: 0; width: 200px; height: 120px;
+    overflow: hidden; opacity: .01; pointer-events: none; }
+</style>
+<body>
+<div class="hearts" aria-hidden="true">♡ &nbsp; ♡ &nbsp; ♡ &nbsp; ♡ &nbsp; ♡</div>
+
+<!-- Background music: hidden YouTube player (audio only, no video shown) -->
+<div id="ytMusicWrap" aria-hidden="true"><div id="ytMusicPlayer"></div></div>
+<button id="musicToggleBtn" type="button" style="display:none" aria-pressed="true" onclick="toggleMusic()">♪ Music: On</button>
+
+<!-- SCREEN 1: INTRO -->
+<section class="screen active" id="screen-intro">
+  <div class="card">
+    <p style="font-size:52px">🎧</p>
+    <h1>Before you open this…</h1>
+    <p>Raise your volume, find a quiet spot,<br>and tap the button when you're ready.</p>
+    <br><button onclick="startExperience()">I'm ready ♡</button>
+    <hr style="border:0; border-top:2px solid #ffb3c1; margin:24px 0 6px">
+    <p style="font-size:36px">📱</p>
+    <h2>Share this letter</h2>
+    <p>Scan the QR code with a phone camera to open this letter.<br>
+    <span class="small">Works only after you publish the page — a file on your computer can't be scanned by another phone.</span></p>
+    <div class="qr-box">
+      <div id="qrcode"><span class="small">Your QR code will appear here ♡</span></div>
+      <p class="small" id="qrUrlLabel" style="word-break:break-all"></p>
+    </div>
+    <br>
+    <label for="shareUrlInput" style="font-weight:bold">Your published link</label>
+    <input class="share-input" id="shareUrlInput" type="url" placeholder="https://your-name.github.io/love-letter/">
+    <p class="small">EDIT ME tip: paste your link once above, or save it permanently as SHARE_URL in the settings in the code.</p>
+    <div class="share-row">
+      <button onclick="makeQrFromInput()">Make my QR code</button>
+      <button class="ghost" onclick="downloadQR()">Download QR ⬇</button>
+    </div>
+    <div class="share-row">
+      <button class="ghost" onclick="copyShareLink()">Copy link</button>
+      <button class="ghost" onclick="shareNative()">Share…</button>
+    </div>
+    <p class="small" id="shareMsg"></p>
+  </div>
+</section>
+
+<!-- SCREEN 2: PIN LOCK -->
+<section class="screen" id="screen-lock">
+  <div class="card" id="lockCard">
+    <div class="big-heart">💗</div>
+    <h2>This letter is locked</h2>
+    <p>Enter the 4-digit PIN</p>
+    <div class="pin-display" id="pinDisplay">____</div>
+    <div class="keypad">
+      <button onclick="pressKey('1')">1</button><button onclick="pressKey('2')">2</button><button onclick="pressKey('3')">3</button>
+      <button onclick="pressKey('4')">4</button><button onclick="pressKey('5')">5</button><button onclick="pressKey('6')">6</button>
+      <button onclick="pressKey('7')">7</button><button onclick="pressKey('8')">8</button><button onclick="pressKey('9')">9</button>
+      <button onclick="clearPin()">C</button><button onclick="pressKey('0')">0</button><button onclick="backspacePin()">⌫</button>
+    </div>
+    <p class="small" id="pinHint">Hint: OUR MONTHSARRY ♡</p>
+  </div>
+</section>
+
+<!-- SCREEN 3: ENVELOPE -->
+<section class="screen" id="screen-envelope">
+  <div class="card">
+    <!-- : recipient nickname -->
+    <h1> For you,My love, ♡</h1>
+    <p>You've got a letter. Tap the envelope to open it.</p>
+    <div class="envelope" onclick="openLetter()" role="button" aria-label="Open the envelope">💌</div>
+    <p class="small">Tap the envelope</p>
+  </div>
+</section>
+
+<!-- SCREEN 4: LETTER -->
+<section class="screen" id="screen-letter">
+  <div class="card">
+    <!-- EDIT ME: greeting -->
+    <h2 style="text-align:left">My love Kharel,</h2>
+    <p class="letter-text" id="letterText"></p>
+    <!-- EDIT ME: signature -->
+    <p class="signature">With all my love,
+        <br>Sharlene Moral ♡</p>
+    <br><button id="toCollageBtn" style="display:none" onclick="showScreen('screen-collage')">See our photos →</button>
+  </div>
+</section>
+
+<!-- SCREEN 5: COLLAGE + FINALE -->
+<section class="screen" id="screen-collage">
+  <h1 style="color:#fff; text-shadow:0 2px 8px rgba(120,30,60,.4)">Our little moments ♡</h1>
+  <div class="collage">
+    <!-- EDIT ME: photo files + captions. Missing files show a placeholder. -->
+    <figure class="photo"><div class="placeholder">📸</div><img src="images/photo1.jpg" alt="Photo 1" onerror="this.remove()" onload="this.previousElementSibling.style.display='none'"><figcaption>SWIMMING TOGETHER WITH YOU DURING THE VACATION</figcaption></figure>
+    <figure class="photo"><div class="placeholder">📸</div><img src="images/photo2.jpg" alt="Photo 2" onerror="this.remove()" onload="this.previousElementSibling.style.display='none'"><figcaption>ATTENDING CHURCH MASS TOGETHER WITH MY FAVORITE PERSON</figcaption></figure>
+    <figure class="photo"><div class="placeholder">📸</div><img src="images/photo3.jpg" alt="Photo 3" onerror="this.remove()" onload="this.previousElementSibling.style.display='none'"><figcaption>YOUR SMILE IS MY COMFORT</figcaption></figure>
+    <figure class="photo"><div class="placeholder">📸</div><img src="images/photo4.jpg" alt="Photo 4" onerror="this.remove()" onload="this.previousElementSibling.style.display='none'"><figcaption>THE MEMORY THAT I WOULD ALWAYS TREASURE</figcaption></figure>
+  </div>
+  <div class="card" id="finaleCard">
+    <h2>One last question…</h2>
+    <p style="font-size:1.3rem; margin:10px 0">Do you love me?</p>
+    <button onclick="answerLove()">Yes ♡</button>
+    <button class="ghost" onclick="answerLove()">No</button>
+    <p id="loveAnswer" style="margin-top:16px; font-weight:bold"></p>
+    <br><button onclick="showScreen('screen-chocolate')">One more surprise →</button>
+  </div>
+</section>
+
+<!-- SCREEN 6: CHOCOLATE QUESTION -->
+<section class="screen" id="screen-chocolate">
+  <div class="card">
+    <p style="font-size:52px">🍫</p>
+    <h2>One more question…</h2>
+    <!-- EDIT ME: chocolate question wording -->
+    <p style="font-size:1.3rem; margin:10px 0">Do you want chocolates?</p>
+    <button onclick="answerChocolate(true)">Yes ♡</button>
+    <button class="ghost" onclick="answerChocolate(false)">No</button>
+    <br><br><button class="ghost" onclick="showScreen('screen-collage')">← Back to photos</button>
+  </div>
+</section>
+
+<!-- SCREEN 7: CHOCOLATE RESULT (both answers get chocolate!) -->
+<section class="screen" id="screen-chocolate-result">
+  <div class="card">
+    <h2 id="chocolateHeading">Chocolates for you! 🍫</h2>
+    <br>
+    <!-- EDIT ME: put chocolate.jpg in the images folder next to this file.
+         If it is missing, a 🍫 placeholder shows instead. -->
+    <figure class="chocolate-photo"><div class="placeholder">🍫</div><img src="images/chocolate.jpg" alt="Chocolates" onerror="this.remove()" onload="this.previousElementSibling.style.display='none'"></figure>
+    <!-- EDIT ME: the No note is set in answerChocolate() in the script below -->
+    <p class="chocolate-note" id="chocolateNote"></p>
+    <br><button onclick="showScreen('screen-favcolor')">Last question →</button>
+    <br><br><button class="ghost" onclick="showScreen('screen-chocolate')">← Ask again</button>
+  </div>
+</section>
+
+<!-- SCREEN 8: FAVORITE COLOR QUESTION (LAST PART) -->
+<section class="screen" id="screen-favcolor">
+  <div class="card">
+    <p style="font-size:52px">🎨</p>
+    <h2>Last part…</h2>
+    <!-- EDIT ME: favorite color question wording -->
+    <p style="font-size:1.3rem; margin:10px 0">What's my favorite color?</p>
+    <div class="color-options">
+      <button class="ghost" onclick="answerFavColor('blue')">a. Blue</button>
+      <button class="ghost" onclick="answerFavColor('black')">b. Black</button>
+      <button class="ghost" onclick="answerFavColor('yellow')">c. Yellow</button>
+    </div>
+    <br><button class="ghost" onclick="showScreen('screen-chocolate-result')">← Back</button>
+  </div>
+</section>
+
+<!-- SCREEN 9: FAVORITE COLOR RESULT -->
+<section class="screen" id="screen-favcolor-result">
+  <div class="card">
+    <p id="favColorEmoji" style="font-size:64px"></p>
+    <h2 id="favColorHeading"></h2>
+    <!-- EDIT ME: the correct quote and wrong message are set in
+         answerFavColor() in the script below -->
+    <p class="fav-quote" id="favColorNote"></p>
+    <br><button id="favColorRetryBtn" onclick="showScreen('screen-favcolor')">Try again</button>
+    <br><br><button class="ghost" onclick="showScreen('screen-chocolate-result')">← Back to chocolates</button>
+  </div>
+</section>
+
+<!-- QR code library (free, loads from CDN — needs internet the first time) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+/* ==========================================================
+   EDIT ME — YOUR SETTINGS (this is the only code you must edit)
+   ========================================================== */
+const CORRECT_PIN = "1222"; // <-- change to your 4-digit PIN
+
+// EDIT ME: your published link for the QR code, e.g.
+// "https://your-name.github.io/love-letter/"
+// Leave "" and the page will use its own web address automatically
+// once it is published online.
+const SHARE_URL = "";
+
+// EDIT ME: background music — paste ANY YouTube link for your song.
+// A normal watch link, a youtu.be short link, a Shorts link, or an
+// embed link all work — just paste the whole link between the quotes.
+// Example below is a placeholder song; replace it with your own.
+// Leave "" for no music.
+const MUSIC_YOUTUBE_URL = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
+
+// EDIT ME: your letter. Use \n\n for a blank line between paragraphs.
+const LETTER_TEXT =
+  "Happy 11 monthsarry my unggoy, my love.\n\n" +
+  "It feels like it was just yesterday we started this journey, and here we are, 11 months of laughter, memories, and growing together." +
+  "Thankyou for being my safe place, my biggest supporter, and the person who makes even ordinary days feel special.\n\n" +
+  "Thank you for reading this. I love you, today and always.";
+/* ========================================================== */
+
+let enteredPin = "";
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0, 0);
+}
+function startExperience() {
+  // Browsers block sound before a tap — this tap starts the music.
+  try { startMusic(); } catch (e) {}
+  showScreen('screen-lock');
+}
+</script>
+<script>
+function renderPin() {
+  document.getElementById('pinDisplay').textContent =
+    (enteredPin + '____').slice(0, 4).split('').join(' ');
+}
+function pressKey(n) {
+  if (enteredPin.length >= 4) return;
+  enteredPin += n; renderPin();
+  if (enteredPin.length === 4) setTimeout(checkPin, 150);
+}
+function clearPin() { enteredPin = ""; renderPin(); }
+function backspacePin() { enteredPin = enteredPin.slice(0, -1); renderPin(); }
+function checkPin() {
+  if (enteredPin === CORRECT_PIN) { showScreen('screen-envelope'); }
+  else {
+    const card = document.getElementById('lockCard');
+    card.classList.remove('shake'); void card.offsetWidth; card.classList.add('shake');
+    document.getElementById('pinHint').textContent = "Oops, wrong PIN — try again ♡";
+    clearPin();
+  }
+}
+function openLetter() {
+  // Second nudge: if the music is not playing yet, start it now.
+  try { startMusic(); } catch (e) {}
+  showScreen('screen-letter');
+  typeLetter();
+}
+let typed = false;
+function typeLetter() {
+  if (typed) return; typed = true;
+  const el = document.getElementById('letterText'); let i = 0;
+  const timer = setInterval(() => {
+    el.textContent = LETTER_TEXT.slice(0, ++i);
+    if (i >= LETTER_TEXT.length) {
+      clearInterval(timer);
+      document.getElementById('toCollageBtn').style.display = 'inline-block';
+    }
+  }, 24);
+}
+function answerLove() {
+  // Both Yes and No lead to the same loving answer — by design!
+  document.getElementById('loveAnswer').textContent =
+    " I love you too, and I always will. ♡";
+}
+function answerChocolate(wantsChocolate) {
+  // Both answers show the chocolate picture — by design!
+  // EDIT ME: change these two messages if you like.
+  const heading = document.getElementById('chocolateHeading');
+  const note = document.getElementById('chocolateNote');
+  if (wantsChocolate) {
+    heading.textContent = "Yay! Chocolates for you! 🍫";
+    note.textContent = "Sweet chocolates for you ♡";
+  } else {
+    heading.textContent = "Chocolates for you anyway! 🍫";
+    note.textContent = "of course you want chocolate";
+  }
+  showScreen('screen-chocolate-result');
+}
+function answerFavColor(choice) {
+  // EDIT ME: a. Blue is the correct answer. Change the quote
+  // or the wrong message below if you like.
+  const heading = document.getElementById('favColorHeading');
+  const note = document.getElementById('favColorNote');
+  const emoji = document.getElementById('favColorEmoji');
+  const retry = document.getElementById('favColorRetryBtn');
+  if (choice === 'blue') {
+    emoji.textContent = "💙";
+    heading.textContent = "You got it right!";
+    note.textContent = "\u201clook under your bed\u201d";
+    retry.textContent = "← Ask again";
+  } else {
+    // b. Black and c. Yellow both land here.
+    emoji.textContent = "😢";
+    heading.textContent = "You're wrong 😢";
+    note.textContent = "You're wrong 😢";
+    retry.textContent = "Try again";
+  }
+  showScreen('screen-favcolor-result');
+}
+/* ---- Background music (YouTube, audio only) ---- */
+let ytPlayer = null, ytApiReady = false, ytPlayerReady = false;
+let musicWanted = false, musicOn = true, pendingMusicStart = false;
+let currentVideoId = '', ytApiLoading = false;
+
+function youtubeIdFromUrl(url) {
+  if (!url) return '';
+  const s = String(url).trim();
+  if (/^[A-Za-z0-9_-]{11}$/.test(s)) return s;
+  let m = s.match(/[?&]v=([A-Za-z0-9_-]{11})/);
+  if (m) return m[1];
+  m = s.match(/youtu\.be\/([A-Za-z0-9_-]{11})/);
+  if (m) return m[1];
+  m = s.match(/\/(?:embed|shorts|live|v)\/([A-Za-z0-9_-]{11})/);
+  if (m) return m[1];
+  return '';
+}
+function setMusicToggleVisible(v) {
+  try { const b = document.getElementById('musicToggleBtn');
+    if (b) b.style.display = v ? 'inline-block' : 'none'; } catch (e) {}
+}
+function updateMusicToggle() {
+  try { const b = document.getElementById('musicToggleBtn'); if (!b) return;
+    b.textContent = musicOn ? '♪ Music: On' : '♪ Music: Off';
+    b.setAttribute('aria-pressed', musicOn ? 'true' : 'false'); } catch (e) {}
+}
+function toggleMusic() {
+  try {
+    musicOn = !musicOn; updateMusicToggle();
+    if (!ytPlayer || !ytPlayerReady) { if (musicOn) startMusic(); return; }
+    if (musicOn) { ytPlayer.setVolume(30); ytPlayer.playVideo(); }
+    else if (ytPlayer.pauseVideo) ytPlayer.pauseVideo();
+  } catch (e) {}
+}
+function loadYouTubeApi() {
+  if (ytApiReady || ytApiLoading) return;
+  if (window.YT && YT.Player) { ytApiReady = true; return; }
+  ytApiLoading = true;
+  const tag = document.createElement('script');
+  tag.src = 'https://www.youtube.com/iframe_api';
+  document.head.appendChild(tag);
+}
+window.onYouTubeIframeAPIReady = function () {
+  ytApiReady = true; ytApiLoading = false;
+  // Persistence fix: a tap that happened before the API was
+  // ready is honoured now, instead of being lost.
+  if (pendingMusicStart && musicWanted) createYtPlayer(currentVideoId);
+};
+function createYtPlayer(id) {
+  if (!id || ytPlayer || !ytApiReady) return;
+  try {
+    ytPlayer = new YT.Player('ytMusicPlayer', {
+      videoId: id,
+      playerVars: { autoplay: 1, loop: 1, playlist: id, controls: 0,
+        disablekb: 1, modestbranding: 1, rel: 0, playsinline: 1 },
+      events: {
+        onReady: function (e) {
+          ytPlayerReady = true; pendingMusicStart = false;
+          try { e.target.setVolume(30); if (musicWanted && musicOn) e.target.playVideo(); } catch (err) {}
+          setMusicToggleVisible(true); updateMusicToggle();
+        },
+        onStateChange: function (e) {
+          if (e.data === YT.PlayerState.PLAYING) { setMusicToggleVisible(true); updateMusicToggle(); }
+        }
+      }
+    });
+  } catch (e) { ytPlayer = null; }
+}
+function startMusic() {
+  try {
+    const id = youtubeIdFromUrl(typeof MUSIC_YOUTUBE_URL !== 'undefined' ? MUSIC_YOUTUBE_URL : '');
+    if (!id) { // empty / unparseable: stay silent, never throw
+      musicWanted = false; pendingMusicStart = false;
+      try { if (ytPlayer && ytPlayer.pauseVideo) ytPlayer.pauseVideo(); } catch (e) {}
+      return;
+    }
+    musicWanted = true; musicOn = true; updateMusicToggle();
+    if (ytPlayer && ytPlayerReady) {
+      if (currentVideoId === id) { // SAME song: just play, no restart
+        try { ytPlayer.setVolume(30); ytPlayer.playVideo(); } catch (e) {}
+      } else { // DIFFERENT song: load it from the start
+        currentVideoId = id;
+        try { ytPlayer.loadVideoById({ videoId: id, startSeconds: 0 });
+          ytPlayer.setVolume(30); ytPlayer.playVideo(); } catch (e) {}
+      }
+      setMusicToggleVisible(true); return;
+    }
+    if (ytPlayer && currentVideoId === id) { pendingMusicStart = true; return; }
+    currentVideoId = id; pendingMusicStart = true;
+    loadYouTubeApi();
+    if (ytApiReady) createYtPlayer(id);
+  } catch (e) {}
+}
+/* ---- Share / QR code ---- */
+function getShareUrl() {
+  const typedUrl = (document.getElementById('shareUrlInput').value || '').trim();
+  if (typedUrl) return typedUrl;
+  if (SHARE_URL) return SHARE_URL;
+  // If published online, use this page's own address. If opened as
+  // a local file (file://), there is no shareable address yet.
+  if (location.protocol === 'http:' || location.protocol === 'https:') return location.href.split('#')[0];
+  return '';
+}
+function initFrontPageQR() {
+  // The QR code lives on the front page (screen-intro) only.
+  // Prefill the published link, then make the QR right away —
+  // when the page is online it uses its own web address.
+  const saved = SHARE_URL || ((location.protocol === 'http:' || location.protocol === 'https:') ? location.href.split('#')[0] : '');
+  if (saved) document.getElementById('shareUrlInput').value = saved;
+  generateShareQR();
+}
+function generateShareQR() {
+  const url = getShareUrl();
+  const box = document.getElementById('qrcode');
+  const label = document.getElementById('qrUrlLabel');
+  const msg = document.getElementById('shareMsg');
+  box.innerHTML = ''; label.textContent = ''; msg.textContent = '';
+  if (!url) {
+    box.innerHTML = '<span class="small">Publish this page first, then paste its link in the field below and tap “Make my QR code” ♡</span>';
+    return;
+  }
+  if (typeof QRCode === 'undefined') {
+    box.innerHTML = '<span class="small">QR maker needs internet to load. Check your connection and reopen this page.</span>';
+    return;
+  }
+  new QRCode(box, { text: url, width: 200, height: 200, colorDark: '#4a2430', colorLight: '#ffffff', correctLevel: QRCode.CorrectLevel.M });
+  label.textContent = url;
+}
+function makeQrFromInput() { generateShareQR(); document.getElementById('shareMsg').textContent = 'QR code ready — scan it to test ♡'; }
+function downloadQR() {
+  const img = document.querySelector('#qrcode img');
+  const canvas = document.querySelector('#qrcode canvas');
+  let dataUrl = img && img.src ? img.src : (canvas ? canvas.toDataURL('image/png') : '');
+  if (!dataUrl) { document.getElementById('shareMsg').textContent = 'Make the QR code first, then download it.'; return; }
+  const a = document.createElement('a'); a.href = dataUrl; a.download = 'love-letter-qr.png'; a.click();
+}
+function copyShareLink() {
+  const url = getShareUrl();
+  if (!url) { document.getElementById('shareMsg').textContent = 'Paste your published link first.'; return; }
+  (navigator.clipboard ? navigator.clipboard.writeText(url) : Promise.reject()).then(
+    () => document.getElementById('shareMsg').textContent = 'Link copied ♡',
+    () => document.getElementById('shareMsg').textContent = url);
+}
+function shareNative() {
+  const url = getShareUrl();
+  if (navigator.share && url) navigator.share({ title: document.title, text: 'I made this letter for you ♡', url }).catch(() => {});
+  else copyShareLink();
+}
+renderPin();
+initFrontPageQR();
+</script>
+</body>
+</html>
